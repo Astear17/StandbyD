@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=2208, height=1242, initial-scale=1.0">
+<title>Astear Clock Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    width: 2208px;
+    height: 1242px;
+    background: #0e0e0e;
+    color: white;
+    display: flex;
+    overflow: hidden;
+}
+
+/* LEFT SIDE */
+.left {
+    width: 75%;
+    height: 100%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Clock */
+.clock-container {
+    margin-top: 120px;
+}
+
+.clock {
+    font-size: 220px;
+    font-weight: 700;
+}
+
+.date {
+    margin-top: 20px;
+    font-size: 42px;
+    opacity: 0.7;
+}
+
+/* Discord */
+.discord-card {
+    position: absolute;
+    top: 40px;
+    left: 60px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    padding: 25px 35px;
+    border-radius: 25px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.discord-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-size: cover;
+    position: relative;
+}
+
+.status-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    border: 3px solid #0e0e0e;
+}
+
+.discord-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.display-name {
+    font-size: 34px;
+    font-weight: 700;
+    background: linear-gradient(to right, #2aaea6, #ffc490);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.username {
+    font-size: 20px;
+    opacity: 0.6;
+}
+
+/* RIGHT SIDE */
+.right {
+    width: 25%;
+    height: 100%;
+    background: #121212;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.youtube-container {
+    flex: 1;
+    border-radius: 25px;
+    overflow: hidden;
+    background: black;
+}
+
+iframe {
+    width: 100%;
+    height: 70%;
+    border: none;
+}
+
+.queue {
+    height: 30%;
+    overflow-y: auto;
+    padding: 10px;
+    background: #181818;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LEFT SIDE -->
+<div class="left">
+
+    <!-- Discord Card -->
+    <div class="discord-card">
+        <div class="discord-avatar" id="avatar">
+            <div class="status-dot" id="status"></div>
+        </div>
+        <div class="discord-info">
+            <div class="display-name" id="displayName">Loading...</div>
+            <div class="username" id="username"></div>
+        </div>
+    </div>
+
+    <!-- Clock -->
+    <div class="clock-container">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">GMT +07:00 - Sunday, February 15, 2026</div>
+    </div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="right">
+    <div class="youtube-container">
+        <iframe id="ytplayer"
+            src="https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID&autoplay=1"
+            allow="autoplay">
+        </iframe>
+        <div class="queue">
+            Playlist Queue (Use YouTube controls to switch songs)
+        </div>
+    </div>
+</div>
+
+<script>
+
+/* CLOCK */
+function updateClock() {
+    const now = new Date();
+
+    const time = now.toLocaleTimeString('en-GB', {
+        hour12: false
+    });
+
+    const date = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    document.getElementById("clock").innerText = time;
+    document.getElementById("date").innerText =
+        "GMT +07:00 - " + date;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+/* DISCORD PRESENCE */
+async function fetchDiscord() {
+    const res = await fetch("https://api.lanyard.rest/v1/users/1036621192515297322");
+    const data = await res.json();
+
+    const user = data.data.discord_user;
+    const status = data.data.discord_status;
+
+    document.getElementById("displayName").innerText = user.display_name;
+    document.getElementById("username").innerText = "@" + user.username;
+
+    document.getElementById("avatar").style.backgroundImage =
+        "url('YOUR_PROFILE_IMAGE_URL')";
+
+    const dot = document.getElementById("status");
+
+    if (status === "online") dot.style.background = "#43b581";
+    else dot.style.background = "#747f8d";
+}
+
+fetchDiscord();
+setInterval(fetchDiscord, 15000);
+
+</script>
+
+</body>
+</html>
