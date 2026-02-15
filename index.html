@@ -30,17 +30,10 @@ body {
     overflow: hidden;
     background-image: radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.12) 0%, transparent 40%),
                       radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.12) 0%, transparent 40%);
-}
-
-/* --- AUTO SCALE CONTAINER (50% SCALE) --- */
-.scale-wrapper {
-    transform: scale(0.5); /* Scales the whole site 50% smaller */
-    transform-origin: center;
-    width: 200vw; /* Double width to compensate for 0.5 scale */
-    height: 200vh; /* Double height to compensate for 0.5 scale */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* Auto 80% Scale Applied Here */
+    zoom: 0.8;
+    -moz-transform: scale(0.8);
+    -moz-transform-origin: center center;
 }
 
 .dashboard-container {
@@ -51,7 +44,7 @@ body {
     gap: 35px;
 }
 
-/* --- LIQUID GLASS CARD --- */
+/* --- LIQUID GLASS CARD WITH DUAL LONG OUTLINES --- */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(40px);
@@ -60,15 +53,16 @@ body {
     border-radius: 40px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
 
-/* Primary Top-Left Outline */
+/* Primary Top-Left Outline (Longer Fade) */
 .glass-card::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 40px;
-    padding: 2.5px; 
+    padding: 2px; 
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.1) 45%, transparent 70%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -77,13 +71,13 @@ body {
     z-index: 2;
 }
 
-/* Secondary Bottom-Right Outline (80% opacity of the top one) */
+/* Secondary Bottom-Right Outline (80% Opacity, Longer Fade) */
 .glass-card::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 40px;
-    padding: 2.5px;
+    padding: 2px;
     background: linear-gradient(315deg, rgba(255, 255, 255, 0.64) 0%, rgba(255, 255, 255, 0.08) 45%, transparent 70%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -92,7 +86,7 @@ body {
     z-index: 1;
 }
 
-/* --- CLOCK --- */
+/* --- CLOCK (REFINED STANDBY FADE) --- */
 .clock-widget {
     flex-grow: 1;
     display: flex;
@@ -120,9 +114,10 @@ body {
     letter-spacing: 1px;
 }
 
-/* --- PROFILE & ACTIVITY --- */
+/* --- PROFILE & ACTIVITY SCALING --- */
 .left-section { display: flex; flex-direction: column; gap: 35px; height: 100%; }
 .widgets-row { display: flex; gap: 35px; height: 260px; }
+
 .profile-widget, .activity-widget { flex: 1; padding: 45px; display: flex; align-items: center; gap: 35px; }
 
 .avatar {
@@ -159,68 +154,69 @@ body {
 }
 .playlist-btn:hover { background: white; color: black; transform: scale(1.02); }
 
-.video-container { flex: 1; border-radius: 30px; overflow: hidden; background: #000; position: relative; z-index: 3; }
+.video-container { flex: 1; border-radius: 30px; overflow: hidden; background: #000; box-shadow: inset 0 0 50px rgba(0,0,0,1); position: relative; z-index: 3; }
 .controls-container { height: 180px; margin-top: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 3; }
-.track-title { font-size: 22px; font-weight: 600; text-align: center; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-title { font-size: 22px; font-weight: 600; text-align: center; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; }
 
 .buttons-row { display: flex; align-items: center; gap: 40px; }
-.ctrl-btn svg { width: 40px; height: 40px; fill: white; opacity: 0.7; cursor: pointer; }
-.loop-active svg { fill: var(--accent); opacity: 1; }
+.ctrl-btn svg { width: 40px; height: 40px; fill: white; opacity: 0.7; cursor: pointer; transition: 0.2s; }
+.ctrl-btn:hover svg { opacity: 1; transform: scale(1.1); }
+.loop-active svg { fill: var(--accent); opacity: 1; filter: drop-shadow(0 0 15px var(--accent)); }
 
 @media (max-width: 1400px) {
-    .scale-wrapper { transform: scale(0.35); } /* Even smaller for mobile */
+    .dashboard-container { grid-template-columns: 1fr; height: auto; padding: 40px 0; }
+    .widgets-row { height: auto; flex-direction: column; }
+    .time-display { font-size: 20vw; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="scale-wrapper">
-    <div class="dashboard-container">
-        <div class="left-section">
-            <div class="widgets-row">
-                <div class="glass-card profile-widget">
-                    <div class="avatar" id="avatar"><div class="status-dot" id="status"></div></div>
-                    <div>
-                        <div class="display-name" id="displayName">Loading...</div>
-                        <div class="username" id="username"></div>
-                        <div id="customStatus" class="custom-status"></div>
-                    </div>
-                </div>
-
-                <div class="glass-card activity-widget">
-                    <div style="width:100%">
-                        <p class="activity-label">Live Session</p>
-                        <div id="activityName" class="activity-title">No activity</div>
-                        <div id="activityTimer" class="activity-timer"></div>
-                    </div>
+<div class="dashboard-container">
+    <div class="left-section">
+        <div class="widgets-row">
+            <div class="glass-card profile-widget">
+                <div class="avatar" id="avatar"><div class="status-dot" id="status"></div></div>
+                <div>
+                    <div class="display-name" id="displayName">Loading...</div>
+                    <div class="username" id="username"></div>
+                    <div id="customStatus" class="custom-status"></div>
                 </div>
             </div>
 
-            <div class="glass-card clock-widget">
-                <div class="time-display" id="clock">00:00:00</div>
-                <div class="date-display" id="date">...</div>
+            <div class="glass-card activity-widget">
+                <div style="width:100%">
+                    <p class="activity-label">Live Session</p>
+                    <div id="activityName" class="activity-title">No activity</div>
+                    <div id="activityTimer" class="activity-timer"></div>
+                </div>
             </div>
         </div>
 
-        <div class="glass-card music-section">
-            <div id="playlist-selector">
-                <h2 style="font-size:36px; margin-bottom:20px;">Select Media Source</h2>
-                <button class="playlist-btn" onclick="goFullscreenAndStart('PLZ2Dl3sR6J-T2JvZTrZ53Y4CDrqqT_eca')">Main Collection</button>
-                <button class="playlist-btn" onclick="goFullscreenAndStart('PLZ2Dl3sR6J-Sr-8ygrY52eRWhgcurkufY')">Secondary Mix</button>
-            </div>
-            <div class="video-container"><div id="player"></div></div>
-            <div class="controls-container">
-                <div class="track-title" id="trackTitle">Standby...</div>
-                <div class="buttons-row">
-                    <div class="ctrl-btn" id="loopBtn" onclick="toggleLoop()"><svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg></div>
-                    <div class="ctrl-btn" onclick="prevVideo()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></div>
-                    <div class="ctrl-btn" onclick="togglePlay()">
-                        <svg id="p-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <svg id="p-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </div>
-                    <div class="ctrl-btn" onclick="nextVideo()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></div>
+        <div class="glass-card clock-widget">
+            <div class="time-display" id="clock">00:00:00</div>
+            <div class="date-display" id="date">...</div>
+        </div>
+    </div>
+
+    <div class="glass-card music-section">
+        <div id="playlist-selector">
+            <h2 style="font-size:36px; margin-bottom:20px; letter-spacing:-1px;">Select Media Source</h2>
+            <button class="playlist-btn" onclick="goFullscreenAndStart('PLZ2Dl3sR6J-T2JvZTrZ53Y4CDrqqT_eca')">Main Collection</button>
+            <button class="playlist-btn" onclick="goFullscreenAndStart('PLZ2Dl3sR6J-Sr-8ygrY52eRWhgcurkufY')">Secondary Mix</button>
+        </div>
+        <div class="video-container"><div id="player"></div></div>
+        <div class="controls-container">
+            <div class="track-title" id="trackTitle">Standby...</div>
+            <div class="buttons-row">
+                <div class="ctrl-btn" id="loopBtn" onclick="toggleLoop()"><svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg></div>
+                <div class="ctrl-btn" onclick="prevVideo()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></div>
+                <div class="ctrl-btn" onclick="togglePlay()">
+                    <svg id="p-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="p-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </div>
+                <div class="ctrl-btn" onclick="nextVideo()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></div>
             </div>
         </div>
     </div>
