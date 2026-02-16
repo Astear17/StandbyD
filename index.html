@@ -75,20 +75,68 @@
         .activity-timer-container { display: flex; align-items: center; gap: 8px; margin-top: 5px; color: var(--accent); }
         .activity-timer { font-size: 20px; font-family: 'Source Code Pro', monospace; }
 
-        /* --- CLOCK & DATE STYLE WITH HH:mm:ss Restored --- */
+        /* --- JUMPING/PROPORTIONAL CLOCK --- */
         .clock-widget { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 60px; }
         
         .time-display { 
+            display: flex;
+            align-items: baseline;
             font-weight: 800; 
-            font-size: 12vw; /* Adjusted slightly to fit seconds */
+            font-size: 12vw; 
             letter-spacing: -0.04em; 
-            line-height: 0.9; 
-            background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
+            line-height: 1;
+            height: 1.1em;
+            overflow: hidden;
+            /* Proportional spacing enabled (tabular-nums removed) */
+        }
+
+        .digit-wrapper {
+            position: relative;
+            width: auto; /* Shrinks to the width of the number */
+            height: 100%;
+            display: inline-block;
+        }
+
+        /* We use a hidden template digit to "stretch" the wrapper to the correct width */
+        .digit-measure {
+            visibility: hidden;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .separator {
+            padding: 0 0.02em;
+            opacity: 0.7;
+            background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .digit {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
         }
-        
+
+        @keyframes slideInUp {
+            0% { transform: translateY(100%); filter: blur(15px); opacity: 0; }
+            100% { transform: translateY(0); filter: blur(0); opacity: 1; }
+        }
+
+        @keyframes slideOutUp {
+            0% { transform: translateY(0); filter: blur(0); opacity: 1; }
+            100% { transform: translateY(-100%); filter: blur(15px); opacity: 0; }
+        }
+
+        .digit.new { animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .digit.old { animation: slideOutUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
         .date-display { 
             font-weight: 500; 
             font-size: 2vw; 
@@ -143,8 +191,17 @@
                 </div>
             </div>
             <div class="glass-card clock-widget">
-                <div class="time-display" id="clock">00:00:00</div>
-                <div class="date-display" id="date">GMT +07:00 - Monday, February 16, 2026</div>
+                <div class="time-display" id="clock">
+                    <div class="digit-wrapper" id="h1"><span class="digit-measure">0</span></div>
+                    <div class="digit-wrapper" id="h2"><span class="digit-measure">0</span></div>
+                    <span class="separator">:</span>
+                    <div class="digit-wrapper" id="m1"><span class="digit-measure">0</span></div>
+                    <div class="digit-wrapper" id="m2"><span class="digit-measure">0</span></div>
+                    <span class="separator">:</span>
+                    <div class="digit-wrapper" id="s1"><span class="digit-measure">0</span></div>
+                    <div class="digit-wrapper" id="s2"><span class="digit-measure">0</span></div>
+                </div>
+                <div class="date-display" id="date">GMT +07:00 • Monday, February 16, 2026</div>
             </div>
         </div>
 
@@ -179,6 +236,33 @@
     <script>
         let activityStart = null;
         const USER_ID = "1036621192515297322";
+
+        function updateDigit(id, newVal) {
+            const container = document.getElementById(id);
+            const currentVal = container.getAttribute('data-value');
+            if (currentVal !== newVal) {
+                // Update the hidden measure so the container jumps to the new width immediately
+                container.querySelector('.digit-measure').innerText = newVal;
+                
+                const oldDigit = document.createElement('div');
+                oldDigit.className = 'digit old';
+                oldDigit.innerText = currentVal || '0';
+                
+                const newDigit = document.createElement('div');
+                newDigit.className = 'digit new';
+                newDigit.innerText = newVal;
+                
+                // Keep the measure span, remove old animated divs
+                const oldAnims = container.querySelectorAll('.digit');
+                oldAnims.forEach(el => el.remove());
+                
+                container.appendChild(oldDigit);
+                container.appendChild(newDigit);
+                container.setAttribute('data-value', newVal);
+                
+                setTimeout(() => { if(oldDigit.parentNode) container.removeChild(oldDigit); }, 400);
+            }
+        }
 
         function updateLanyard() {
             fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`)
@@ -221,17 +305,21 @@
 
         function updateVisuals() {
             const now = new Date();
-            // Restored HH:mm:ss format
-            document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB', { hour12: false });
+            const h = now.getHours().toString().padStart(2, '0');
+            const m = now.getMinutes().toString().padStart(2, '0');
+            const s = now.getSeconds().toString().padStart(2, '0');
+
+            updateDigit('h1', h[0]); updateDigit('h2', h[1]);
+            updateDigit('m1', m[0]); updateDigit('m2', m[1]);
+            updateDigit('s1', s[0]); updateDigit('s2', s[1]);
             
-            // Updated to: GMT +07:00 • Monday, February 16, 2026
             const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
             document.getElementById('date').innerText = `GMT +07:00 • ${dateStr}`;
 
             if(activityStart) {
                 const diff = Math.floor((Date.now() - activityStart) / 1000);
-                const m = Math.floor(diff / 60); const s = diff % 60;
-                document.getElementById('activityTimer').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                const am = Math.floor(diff / 60); const as = diff % 60;
+                document.getElementById('activityTimer').innerText = `${am.toString().padStart(2,'0')}:${as.toString().padStart(2,'0')}`;
             }
         }
 
