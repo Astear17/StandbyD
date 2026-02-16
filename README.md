@@ -1,10 +1,12 @@
 # StandbyD - Standby Clock 🌌
 
-**Standby169** là một webapp dạng Standby Deck, mang phong cách Liquid Glass của iOS 26. Webapp này mình làm để thiết kế màn hình chờ bao gồm: cung cấp thông tin thời gian, trạng thái hoạt động Discord, cũng như trình phát playlist trên YouTube để chạy queue ngay trong web
+**StandbyD** là một webapp dạng Standby Deck được lấy ý tưởng từ chế độ Standby của iPhone, mang phong cách Liquid Glass của iOS 26. Webapp này mình làm để thiết kế màn hình chờ bao gồm: cung cấp thông tin thời gian, trạng thái hoạt động Discord, cũng như trình phát playlist trên YouTube để chạy queue ngay trong web.
 
 🔗 **Live Demo:**
 - GitHub Pages: https://astear17.github.io/StandbyD/
-- Vercel: https://standbyd.vercel.app
+- Vercel: https://standbyd.vercel.app/
+- InfinityFree: https://standby.rf.gd/
+- Short link tới Vercel: https://is.gd/Standby
 
 <div align="center">
   <img src="https://github.com/Astear17/StandbyD/blob/main/iOS.png?raw=true" width="400">
@@ -27,7 +29,7 @@
 
 ## ✨ Tính năng chính
 
-- **Giao diện Liquid Glass:** Thiết kế tối màu với hiệu ứng kính mờ (blur droplet), bo góc mềm mại và các góc kính sáng.
+- **Giao diện Liquid Glass:** Thiết kế tối màu với hiệu ứng kính mờ mỗi giây/phút/giờ (blur droplet), bo góc mềm mại và các góc kính sáng.
 - **🕒 Đồng hồ thời gian thực:** Hiển thị giờ giấc chính xác (GMT+7) và ngày tháng hiện tại với font chữ lớn, dễ đọc.
 - **👾 Tích hợp Discord Status (Lanyard API):**
   - Hiển thị Avatar, tên hiển thị, và trạng thái Online/Offline/DND.
