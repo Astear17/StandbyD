@@ -20,122 +20,153 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-html, body {
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    -webkit-text-size-adjust: 100%;
-}
-
 body {
+    background: #000000;
+    color: var(--text-primary);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
     background-image: radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.12) 0%, transparent 40%),
                       radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.12) 0%, transparent 40%);
-    /* Forced scaling for consistency */
-    zoom: 0.7;
-    -moz-transform: scale(0.7);
-    -moz-transform-origin: center center;
 }
 
 .dashboard-container {
-    width: 95vw;
-    height: 90vh;
-    min-width: 1000px; /* Forces horizontal layout on high-DPI mobile screens */
+    width: 96vw;
+    height: 92vh;
     display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 550px;
+    gap: 35px;
 }
 
-/* --- CARDS --- */
+/* --- LIQUID GLASS CARD WITH DUAL LONG OUTLINES --- */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border: 1px solid var(--glass-border);
-    border-radius: 35px;
+    border-radius: 40px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
 
-/* --- LEFT SIDE --- */
-.left-section { 
-    display: grid;
-    grid-template-rows: 200px 1fr;
-    gap: 20px;
+/* Primary Top-Left Outline (Longer Fade) */
+.glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 40px;
+    padding: 2px; 
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.1) 45%, transparent 70%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
 }
 
-.widgets-row { 
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Forces profile/activity side-by-side */
-    gap: 20px;
+/* Secondary Bottom-Right Outline (80% Opacity, Longer Fade) */
+.glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 40px;
+    padding: 2px;
+    background: linear-gradient(315deg, rgba(255, 255, 255, 0.64) 0%, rgba(255, 255, 255, 0.08) 45%, transparent 70%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
 }
 
+/* --- CLOCK (REFINED STANDBY FADE) --- */
 .clock-widget {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: 60px;
+    padding: 80px;
 }
 
 .time-display {
-    font-size: 10vw;
+    font-size: 13vw;
     font-weight: 800;
-    letter-spacing: -5px;
-    line-height: 1;
-    color: white;
+    letter-spacing: -6px;
+    line-height: 0.9;
+    background: linear-gradient(180deg, #ffffff 75%, #b0b0b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
 }
 
 .date-display {
-    font-size: 1.5vw;
+    font-size: 2.2vw;
     color: var(--text-secondary);
+    margin-top: 20px;
     font-weight: 600;
-    margin-top: 10px;
+    letter-spacing: 1px;
 }
 
-/* --- WIDGET CONTENT --- */
-.profile-widget, .activity-widget { padding: 30px; display: flex; align-items: center; gap: 20px; }
+/* --- PROFILE & ACTIVITY SCALING --- */
+.left-section { display: flex; flex-direction: column; gap: 35px; height: 100%; }
+.widgets-row { display: flex; gap: 35px; height: 260px; }
+
+.profile-widget, .activity-widget { flex: 1; padding: 45px; display: flex; align-items: center; gap: 35px; }
 
 .avatar {
-    width: 90px; height: 90px; border-radius: 50%;
+    width: 130px; height: 130px; border-radius: 50%;
     background-size: cover; position: relative;
-    border: 2px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 5;
 }
 
 .status-dot {
-    width: 20px; height: 20px; border-radius: 50%;
-    position: absolute; bottom: 2px; right: 2px;
-    border: 3px solid #000;
+    width: 28px; height: 28px; border-radius: 50%;
+    position: absolute; bottom: 8px; right: 8px;
+    border: 5px solid #1a1a1a;
 }
 
-.display-name { font-size: 28px; font-weight: 800; color: #fff; }
-.username { font-size: 16px; opacity: 0.5; }
-.custom-status { font-size: 16px; margin-top: 5px; color: #ddd; display: flex; align-items: center; gap: 5px; }
-.custom-status img { width: 18px; height: 18px; }
+.display-name { font-size: 42px; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right,#2aaea6,#ffc490); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.username { font-size: 22px; opacity: 0.5; font-weight: 600; }
+.custom-status { font-size: 22px; margin-top: 10px; display: flex; align-items: center; gap: 10px; color: #eee; font-weight: 400; }
+.custom-status img { width: 28px; height: 28px; }
 
-.activity-label { opacity: 0.4; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
-.activity-title { font-size: 22px; font-weight: 800; }
-.activity-timer { font-size: 20px; color: var(--accent); font-family: monospace; }
+.activity-label { opacity: 0.4; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-weight: 800; }
+.activity-title { font-size: 32px; font-weight: 800; line-height: 1.2; }
+.activity-timer { font-size: 26px; color: var(--accent); margin-top: 10px; font-weight: 600; font-family: monospace; }
 
-/* --- MEDIA CARD (1/4) --- */
-.music-section { padding: 20px; display: flex; flex-direction: column; }
-.video-container { flex: 1; border-radius: 20px; overflow: hidden; background: #000; }
-.controls-container { padding-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.track-title { font-size: 14px; text-align: center; opacity: 0.8; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.buttons-row { display: flex; align-items: center; gap: 20px; }
-.ctrl-btn svg { width: 30px; height: 30px; fill: white; cursor: pointer; }
-
+/* --- MUSIC --- */
+.music-section { padding: 30px; display: flex; flex-direction: column; }
 #playlist-selector {
-    position: absolute; inset: 0; background: rgba(0,0,0,0.95);
-    z-index: 100; display: flex; flex-direction: column; justify-content: center; padding: 20px; gap: 10px;
+    position: absolute; inset: 0; background: rgba(0,0,0,0.98);
+    z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 25px; padding: 50px;
 }
 .playlist-btn {
-    background: rgba(255,255,255,0.1); border: none; padding: 15px; border-radius: 15px;
-    color: white; font-weight: 700; cursor: pointer;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+    padding: 25px; border-radius: 30px; color: white; width: 100%; cursor: pointer; font-size: 22px; font-weight: 700; transition: 0.3s;
+}
+.playlist-btn:hover { background: white; color: black; transform: scale(1.02); }
+
+.video-container { flex: 1; border-radius: 30px; overflow: hidden; background: #000; box-shadow: inset 0 0 50px rgba(0,0,0,1); position: relative; z-index: 3; }
+.controls-container { height: 180px; margin-top: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 3; }
+.track-title { font-size: 22px; font-weight: 600; text-align: center; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; }
+
+.buttons-row { display: flex; align-items: center; gap: 40px; }
+.ctrl-btn svg { width: 40px; height: 40px; fill: white; opacity: 0.7; cursor: pointer; transition: 0.2s; }
+.ctrl-btn:hover svg { opacity: 1; transform: scale(1.1); }
+.loop-active svg { fill: var(--accent); opacity: 1; filter: drop-shadow(0 0 15px var(--accent)); }
+
+@media (max-width: 1400px) {
+    .dashboard-container { grid-template-columns: 1fr; height: auto; padding: 40px 0; }
+    .widgets-row { height: auto; flex-direction: column; }
+    .time-display { font-size: 20vw; }
 }
 </style>
 </head>
+
 <body>
 
 <div class="dashboard-container">
@@ -149,14 +180,16 @@ body {
                     <div id="customStatus" class="custom-status"></div>
                 </div>
             </div>
+
             <div class="glass-card activity-widget">
-                <div>
+                <div style="width:100%">
                     <p class="activity-label">Live Session</p>
                     <div id="activityName" class="activity-title">No activity</div>
                     <div id="activityTimer" class="activity-timer"></div>
                 </div>
             </div>
         </div>
+
         <div class="glass-card clock-widget">
             <div class="time-display" id="clock">00:00:00</div>
             <div class="date-display" id="date">...</div>
@@ -165,16 +198,20 @@ body {
 
     <div class="glass-card music-section">
         <div id="playlist-selector">
-            <h3 style="color:white; text-align:center; margin-bottom:10px;">Select Media</h3>
-            <button class="playlist-btn" onclick="startPlayer('PLZ2Dl3sR6J-T2JvZTrZ53Y4CDrqqT_eca')">Main Collection</button>
-            <button class="playlist-btn" onclick="startPlayer('PLZ2Dl3sR6J-Sr-8ygrY52eRWhgcurkufY')">Secondary Mix</button>
+            <h2 style="font-size:36px; margin-bottom:20px; letter-spacing:-1px;">Select Media Source</h2>
+            <button class="playlist-btn" onclick="goFullscreenAndStart('PLZ2Dl3sR6J-T2JvZTrZ53Y4CDrqqT_eca')">Main Collection</button>
+            <button class="playlist-btn" onclick="goFullscreenAndStart('PLZ2Dl3sR6J-Sr-8ygrY52eRWhgcurkufY')">Secondary Mix</button>
         </div>
         <div class="video-container"><div id="player"></div></div>
         <div class="controls-container">
             <div class="track-title" id="trackTitle">Standby...</div>
             <div class="buttons-row">
+                <div class="ctrl-btn" id="loopBtn" onclick="toggleLoop()"><svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg></div>
                 <div class="ctrl-btn" onclick="prevVideo()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></div>
-                <div class="ctrl-btn" onclick="togglePlay()"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="ctrl-btn" onclick="togglePlay()">
+                    <svg id="p-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="p-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </div>
                 <div class="ctrl-btn" onclick="nextVideo()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></div>
             </div>
         </div>
@@ -182,56 +219,113 @@ body {
 </div>
 
 <script>
+function goFullscreenAndStart(id) {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    startPlayer(id);
+}
+
 function updateClock(){
     const now = new Date();
     document.getElementById("clock").innerText = now.toLocaleTimeString('en-GB',{hour12:false});
-    document.getElementById("date").innerText = "GMT +07:00 - " + now.toLocaleDateString('en-US',{weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    document.getElementById("date").innerText = 
+        "GMT +07:00 - " + now.toLocaleDateString('en-US',{weekday:'long', year:'numeric', month:'long', day:'numeric'});
 }
-setInterval(updateClock, 1000); updateClock();
+setInterval(updateClock, 1000);
+updateClock();
 
 let currentActivityStart = null;
 function runTimer(){
     if(!currentActivityStart) return;
     const diff = Date.now() - currentActivityStart;
     const sec = Math.floor(diff/1000);
-    document.getElementById("activityTimer").innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
+    const m = Math.floor(sec/60), s = sec%60;
+    document.getElementById("activityTimer").innerText = `${m}:${s.toString().padStart(2,'0')}`;
     requestAnimationFrame(runTimer);
 }
 
 async function fetchDiscord(){
-    try {
-        const res = await fetch("https://api.lanyard.rest/v1/users/1036621192515297322");
-        const { data } = await res.json();
-        if(!data) return;
-        const user = data.discord_user;
-        document.getElementById("avatar").style.backgroundImage = `url('https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256')`;
-        document.getElementById("displayName").innerText = user.display_name || user.username;
-        document.getElementById("username").innerText = "@" + user.username;
-        const colors = {online:"#43b581", idle:"#faa61a", dnd:"#f04747", offline:"#747f8d"};
-        document.getElementById("status").style.background = colors[data.discord_status] || "#747f8d";
-        
-        const activity = data.activities.find(a => a.type === 0 || a.name === "Spotify");
-        if(activity) {
-            document.getElementById("activityName").innerText = activity.name;
-            currentActivityStart = activity.timestamps?.start || null;
-            if(currentActivityStart) runTimer();
+    const res = await fetch("https://api.lanyard.rest/v1/users/1036621192515297322");
+    const json = await res.json();
+    const data = json.data;
+    if(!data) return;
+
+    const user = data.discord_user;
+    const format = user.avatar?.startsWith("a_") ? "gif":"webp";
+    document.getElementById("avatar").style.backgroundImage = `url('https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${format}?size=256')`;
+    document.getElementById("displayName").innerText = user.display_name || user.username;
+    document.getElementById("username").innerText = "@" + user.username;
+
+    const colors = {online:"#43b581", idle:"#faa61a", dnd:"#f04747", offline:"#747f8d"};
+    document.getElementById("status").style.background = colors[data.discord_status] || "#747f8d";
+
+    const customDiv = document.getElementById("customStatus");
+    customDiv.innerHTML = "";
+    document.getElementById("activityName").innerText = "No activity";
+    document.getElementById("activityTimer").innerText = "";
+    currentActivityStart = null;
+
+    data.activities.forEach(act => {
+        if(act.type === 4) {
+            let emojiHtml = "";
+            if(act.emoji?.id) {
+                emojiHtml = `<img src="https://cdn.discordapp.com/emojis/${act.emoji.id}.png">`;
+            } else if (act.state && act.state.includes("luv u #.nag")) {
+                emojiHtml = "🤍"; 
+            }
+            customDiv.innerHTML = `${emojiHtml} <span>${act.state || ''}</span>`;
         }
-    } catch(e) {}
+        if(act.type === 0 || act.name === "Spotify"){
+            document.getElementById("activityName").innerText = act.name;
+            if(act.timestamps?.start) { currentActivityStart = act.timestamps.start; runTimer(); }
+        }
+    });
 }
 fetchDiscord(); setInterval(fetchDiscord, 15000);
 
-let player;
+let player, isLooping = false;
 function startPlayer(id) {
-    document.getElementById("playlist-selector").style.display = "none";
-    player = new YT.Player('player', {
-        height: '100%', width: '100%',
-        playerVars: { 'autoplay': 1, 'listType': 'playlist', 'list': id, 'controls': 0 },
-        events: { 'onReady': (e) => e.target.playVideo() }
-    });
+    document.getElementById("playlist-selector").style.opacity = "0";
+    setTimeout(() => document.getElementById("playlist-selector").style.display = "none", 400);
+
+    if(!player) {
+        player = new YT.Player('player', {
+            height: '100%', width: '100%',
+            playerVars: { 'autoplay': 1, 'controls': 0, 'listType': 'playlist', 'list': id },
+            events: { 'onStateChange': onStateChange, 'onReady': (e) => { e.target.playVideo(); updateTitle(); } }
+        });
+    } else {
+        player.loadPlaylist({list: id});
+    }
 }
+
+function onStateChange(e) {
+    if(e.data == 1) { 
+        document.getElementById("p-play").style.display="none"; 
+        document.getElementById("p-pause").style.display="block"; 
+    } else { 
+        document.getElementById("p-play").style.display="block"; 
+        document.getElementById("p-pause").style.display="none"; 
+    }
+    if(e.data == 0 && isLooping) player.playVideoAt(0);
+}
+
+function updateTitle() {
+    if(player && player.getVideoData) {
+        const t = player.getVideoData().title;
+        if(t) document.getElementById("trackTitle").innerText = t;
+    }
+}
+setInterval(updateTitle, 2000);
+
 function togglePlay() { player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
 function nextVideo() { player.nextVideo(); }
 function prevVideo() { player.previousVideo(); }
+function toggleLoop() { 
+    isLooping = !isLooping; 
+    document.getElementById("loopBtn").classList.toggle("loop-active", isLooping);
+}
 </script>
 </body>
 </html>
