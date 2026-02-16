@@ -3,23 +3,23 @@
 **Standby169** là một webapp dạng Standby Deck, mang phong cách Liquid Glass của iOS 26. Webapp này mình làm để thiết kế màn hình chờ bao gồm: cung cấp thông tin thời gian, trạng thái hoạt động Discord, cũng như trình phát playlist trên YouTube để chạy queue ngay trong web
 
 🔗 **Live Demo:**
-- GitHub Pages: https://astear17.github.io/Standby169/
-- Vercel: https://standby169.vercel.app
+- GitHub Pages: https://astear17.github.io/StandbyD/
+- Vercel: https://standbyd.vercel.app
 
 <div align="center">
-  <img src="https://github.com/Astear17/Standby169/blob/main/iOS.png?raw=true" width="400">
+  <img src="https://github.com/Astear17/StandbyD/blob/main/iOS.png?raw=true" width="400">
   <br>
-  <em>iOS - Safari Preview (50% scale)</em>
+  <em>iOS - Safari Preview (iPhone 7 Plus, 50% scale)</em>
 </div>
 <br>
 <div align="center">
-  <img src="https://github.com/Astear17/Standby169/blob/main/Android.png?raw=true" width="400">
+  <img src="https://github.com/Astear17/StandbyD/blob/main/Android.png?raw=true" width="400">
   <br>
   <em>Android - Chrome Preview (Tự vào fullscreen khi mở nhạc)</em>
 </div>
 <br>
 <div align="center">
-  <img src="https://github.com/Astear17/Standby169/blob/main/image.png?raw=true" width="400">
+  <img src="https://github.com/Astear17/StandbyD/blob/main/image.png?raw=true" width="400">
   <br>
   <em>PC Web - MS Edge Preview (Cho phép quản lý/xem queue, 150% scale)</em>
 </div>
