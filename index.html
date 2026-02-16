@@ -40,7 +40,7 @@ body {
     gap: 35px;
 }
 
-/* --- LIQUID GLASS CARD WITH DUAL LONG OUTLINES --- */
+/* --- LIQUID GLASS CARD --- */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(40px);
@@ -52,7 +52,6 @@ body {
     box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
 
-/* Primary Top-Left Outline (Longer Fade) */
 .glass-card::before {
     content: '';
     position: absolute;
@@ -67,7 +66,6 @@ body {
     z-index: 2;
 }
 
-/* Secondary Bottom-Right Outline (80% Opacity, Longer Fade) */
 .glass-card::after {
     content: '';
     position: absolute;
@@ -82,78 +80,59 @@ body {
     z-index: 1;
 }
 
-/* --- CLOCK (REFINED STANDBY FADE) --- */
+/* --- CLOCK (REFINED SIZE) --- */
 .clock-widget {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 80px;
+    padding: 0 60px;
+    min-height: 0; /* Prevents stretching */
 }
 
 .time-display {
-    font-size: 13vw;
+    font-size: 11.5vw; /* Slightly smaller to prevent border overflow */
     font-weight: 800;
-    letter-spacing: -6px;
-    line-height: 0.9;
-    background: linear-gradient(180deg, #ffffff 75%, #b0b0b0 100%);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    background: linear-gradient(180deg, #ffffff 75%, #aaaaaa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
+    white-space: nowrap;
 }
 
 .date-display {
-    font-size: 2.2vw;
+    font-size: 1.8vw;
     color: var(--text-secondary);
-    margin-top: 20px;
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-weight: 500;
+    margin-top: 15px;
+    margin-left: 5px;
+    letter-spacing: 0.01em;
 }
 
-/* --- PROFILE & ACTIVITY SCALING --- */
+/* --- PROFILE & ACTIVITY --- */
 .left-section { display: flex; flex-direction: column; gap: 35px; height: 100%; }
 .widgets-row { display: flex; gap: 35px; height: 260px; }
-
 .profile-widget, .activity-widget { flex: 1; padding: 45px; display: flex; align-items: center; gap: 35px; }
-
-.avatar {
-    width: 130px; height: 130px; border-radius: 50%;
-    background-size: cover; position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    z-index: 5;
-}
-
-.status-dot {
-    width: 28px; height: 28px; border-radius: 50%;
-    position: absolute; bottom: 8px; right: 8px;
-    border: 5px solid #1a1a1a;
-}
-
+.avatar { width: 130px; height: 130px; border-radius: 50%; background-size: cover; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 5; }
+.status-dot { width: 28px; height: 28px; border-radius: 50%; position: absolute; bottom: 8px; right: 8px; border: 5px solid #1a1a1a; }
 .display-name { font-size: 42px; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right,#2aaea6,#ffc490); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .username { font-size: 22px; opacity: 0.5; font-weight: 600; }
 .custom-status { font-size: 22px; margin-top: 10px; display: flex; align-items: center; gap: 10px; color: #eee; font-weight: 400; }
 .custom-status img { width: 28px; height: 28px; }
-
 .activity-label { opacity: 0.4; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-weight: 800; }
 .activity-title { font-size: 32px; font-weight: 800; line-height: 1.2; }
 .activity-timer { font-size: 26px; color: var(--accent); margin-top: 10px; font-weight: 600; font-family: monospace; }
 
 /* --- MUSIC --- */
 .music-section { padding: 30px; display: flex; flex-direction: column; }
-#playlist-selector {
-    position: absolute; inset: 0; background: rgba(0,0,0,0.98);
-    z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 25px; padding: 50px;
-}
-.playlist-btn {
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
-    padding: 25px; border-radius: 30px; color: white; width: 100%; cursor: pointer; font-size: 22px; font-weight: 700; transition: 0.3s;
-}
+#playlist-selector { position: absolute; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 25px; padding: 50px; }
+.playlist-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 30px; color: white; width: 100%; cursor: pointer; font-size: 22px; font-weight: 700; transition: 0.3s; }
 .playlist-btn:hover { background: white; color: black; transform: scale(1.02); }
-
 .video-container { flex: 1; border-radius: 30px; overflow: hidden; background: #000; box-shadow: inset 0 0 50px rgba(0,0,0,1); position: relative; z-index: 3; }
 .controls-container { height: 180px; margin-top: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 3; }
 .track-title { font-size: 22px; font-weight: 600; text-align: center; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; }
-
 .buttons-row { display: flex; align-items: center; gap: 40px; }
 .ctrl-btn svg { width: 40px; height: 40px; fill: white; opacity: 0.7; cursor: pointer; transition: 0.2s; }
 .ctrl-btn:hover svg { opacity: 1; transform: scale(1.1); }
@@ -162,7 +141,7 @@ body {
 @media (max-width: 1400px) {
     .dashboard-container { grid-template-columns: 1fr; height: auto; padding: 40px 0; }
     .widgets-row { height: auto; flex-direction: column; }
-    .time-display { font-size: 20vw; }
+    .time-display { font-size: 18vw; }
 }
 </style>
 </head>
@@ -228,13 +207,14 @@ function goFullscreenAndStart(id) {
 
 function updateClock(){
     const now = new Date();
-    document.getElementById("clock").innerText = now.toLocaleTimeString('en-GB',{hour12:false});
+    document.getElementById("clock").innerText = now.toLocaleTimeString('en-GB', {hour12:false});
     document.getElementById("date").innerText = 
         "GMT +07:00 - " + now.toLocaleDateString('en-US',{weekday:'long', year:'numeric', month:'long', day:'numeric'});
 }
 setInterval(updateClock, 1000);
 updateClock();
 
+/* --- Lanyard & Player logic remains identical --- */
 let currentActivityStart = null;
 function runTimer(){
     if(!currentActivityStart) return;
@@ -271,8 +251,6 @@ async function fetchDiscord(){
             let emojiHtml = "";
             if(act.emoji?.id) {
                 emojiHtml = `<img src="https://cdn.discordapp.com/emojis/${act.emoji.id}.png">`;
-            } else if (act.state && act.state.includes("luv u #.nag")) {
-                emojiHtml = "🤍"; 
             }
             customDiv.innerHTML = `${emojiHtml} <span>${act.state || ''}</span>`;
         }
