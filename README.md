@@ -1,4 +1,4 @@
-# Standby169 🌌
+# StandbyD - Standby Clock 🌌
 
 **Standby169** là một webapp dạng Standby Deck, mang phong cách Liquid Glass của iOS 26. Webapp này mình làm để thiết kế màn hình chờ bao gồm: cung cấp thông tin thời gian, trạng thái hoạt động Discord, cũng như trình phát playlist trên YouTube để chạy queue ngay trong web
 
